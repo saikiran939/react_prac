@@ -1,0 +1,102 @@
+<html>
+<head>
+
+ <script src="https://fb.me/react-15.2.1.js"></script>
+ <script src="https://fb.me/react-dom-15.2.1.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
+<title> ES6 Stateless component!</title>
+<link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body>
+
+<div id="react-container">
+</div>
+
+		
+<script type="text/babel">
+		var Note = React.createClass({
+			getInitialState(){
+				return {editing:false};
+			},
+			save(){
+				var textVal = this.refs.saveText.value;
+				console.log(textVal);
+				this.setState({editing:false});
+			},
+			edit(){
+				this.setState({editing:true});
+			},
+			remove(){
+				this.setState({editing:false});
+			},
+			
+			renderForm(){
+				return (
+						<div className="note">
+							<textarea ref="saveText"> </textarea>
+							<button onClick={this.save}>SAVE</button>
+						</div>
+				)
+			},
+			
+			renderNote(){
+				return (	<div className="note">
+								<p>{this.props.children}</p>
+								<span> 
+									<button onClick={this.edit}>EDIT</button>
+									<button onClick={this.remove}>X</button>
+								</span>
+							</div>
+					)
+			},
+
+			render(){
+				return (this.state.editing) ? this.renderForm(): this.renderNote();
+			}
+		});
+
+		var Board = React.createClass({
+				propTypes:{
+					count: function(props, propName){
+							if(typeof props[propName] != "number"){
+								return Error("Count must be a number");
+							}
+
+						if(props[propName] > 100){
+							return new Error("cannot support that many notes");
+						}
+					}
+
+				},
+
+				getInitialState(){
+					return {
+							notes: [
+										"Call Sai",
+										"Eat lunch",
+										"Get Chalk",
+										"Sleep Well"
+
+									]
+					}
+				},
+
+				render(){
+					return (<div className="Board">
+								{this.state.notes.map((note, i) => {
+									return <Note key={i}> {note} </Note>	
+								})}
+							</div>)
+				}
+
+		});
+
+		ReactDOM.render(<Board count={10}/>,
+                document.getElementById('react-container'))
+
+</script>
+
+</body>
+
+</html>xx
